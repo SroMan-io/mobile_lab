@@ -10,4 +10,6 @@
     <color name="start_gradient">#E3562A</color>
     <color name="end_gradient">#F29F3F</color>
     <color name="skip_button">#78746D</color>
+    <color name="dots_current">#65AAEA</color>
+    <color name="dots_other">#D5D4D4</color>
 </resources>
