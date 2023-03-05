@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Mobile_Lab</string>
+    <string name="match_parent">match_parent</string>
 </resources>
