@@ -7,6 +7,10 @@ android {
     namespace 'com.tsu.mobile_lab'
     compileSdk 33
 
+    buildFeatures{
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.tsu.mobile_lab"
         minSdk 29
