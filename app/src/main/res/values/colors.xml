@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="start_gradient">#E3562A</color>
     <color name="end_gradient">#F29F3F</color>
+    <color name="skip_button">#78746D</color>
 </resources>

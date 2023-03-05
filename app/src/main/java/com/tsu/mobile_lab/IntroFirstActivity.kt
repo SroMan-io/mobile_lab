@@ -7,5 +7,7 @@ class IntroFirstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro_first)
+
+        supportActionBar?.hide()
     }
 }

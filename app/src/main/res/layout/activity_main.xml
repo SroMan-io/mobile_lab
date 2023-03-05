@@ -17,23 +17,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button2"
         style="@style/RedButton"
-
-
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:text="Next"
-        android:textAllCaps="false"
+        app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.703"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
-        style="@style/RedButton"
-        android:text="Button"
-    />
+        android:id="@+id/button5"
+        style="@style/SkipButton"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

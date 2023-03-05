@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.button1.setOnClickListener {
+        binding.button2.setOnClickListener {
             val intent = Intent(this, IntroFirstActivity::class.java)
             startActivity(intent)
         }
