@@ -32,17 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         setupViewPager(binding!!)
-        /*binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        binding.button2.setOnClickListener {
-            val intent = Intent(this, IntroFirstActivity::class.java)
-            startActivity(intent)
-        }*/
-
-
-        //supportActionBar?.hide()
     }
 
     private fun setupViewPager(binding: ActivityMainBinding){
