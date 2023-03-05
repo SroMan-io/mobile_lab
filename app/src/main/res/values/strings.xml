@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Mobile_Lab</string>
     <string name="match_parent">match_parent</string>
+    <string name="title_intro_one">Learn anytime and anywhere</string>
+    <string name="title_intro_two">Find a course for you</string>
+    <string name="title_intro_three">Improve your skills</string>
+    <string name="description">Quarantine is the perfect time to spend your day learning something new, from anywhere!</string>
+
+
 </resources>
