@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
             super.onPageSelected(position)
 
             if(position == PageLists.introSlides.size - 1){
-                binding?.button2?.text = "Finish"
+                binding?.button2?.text = "Let's Start"
             }
             else{
                 binding?.button2?.text = "Next"
