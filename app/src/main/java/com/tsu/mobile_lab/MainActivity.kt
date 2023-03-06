@@ -16,12 +16,14 @@ class MainActivity : AppCompatActivity() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
+
+
             if(position == PageLists.introSlides.size - 1){
-                binding?.button2?.text = "Let's Start"
+                binding?.buttonNavigation?.text = "Let's Start"
             }
             else{
-                binding?.button2?.text = "Next"
-                binding?.button2?.setOnClickListener{
+                binding?.buttonNavigation?.text = "Next"
+                binding?.buttonNavigation?.setOnClickListener{
                     viewPager2?.currentItem = position + 1
                 }
             }
@@ -32,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         setupViewPager(binding!!)
+
+
     }
 
     private fun setupViewPager(binding: ActivityMainBinding){

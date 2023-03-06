@@ -11,7 +11,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="375dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNavigation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
         app:selectedDotColor="@color/dots_current" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonNavigation"
         style="@style/RedButton"
         android:text="Next"
         app:cornerRadius="15dp"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/buttonSkip"
         style="@style/SkipButton"
 
         android:layout_width="64dp"
