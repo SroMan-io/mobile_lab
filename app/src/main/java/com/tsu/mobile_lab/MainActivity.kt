@@ -12,14 +12,23 @@ class MainActivity : AppCompatActivity() {
 
     private var viewPager2: ViewPager2? = null
 
+    private var currentPosition: Int = 0
+
+    private var amountOfIntroPages: Int = 0
+
     private val pager2CallBack = object: ViewPager2.OnPageChangeCallback(){
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
 
+            currentPosition = position
+            amountOfIntroPages = PageLists.introSlides.size
 
-
-            if(position == PageLists.introSlides.size - 1){
+            if(position == amountOfIntroPages - 1){
                 binding?.buttonNavigation?.text = "Let's Start"
+                binding?.buttonNavigation?.setOnClickListener{
+                    val intent = Intent(this@MainActivity, SignUpActivity::class.java)
+                    startActivity(intent)
+                }
             }
             else{
                 binding?.buttonNavigation?.text = "Next"
@@ -34,6 +43,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         setupViewPager(binding!!)
+
+        binding?.buttonSkip?.setOnClickListener{
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
 
 
     }

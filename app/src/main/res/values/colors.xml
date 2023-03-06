@@ -12,4 +12,5 @@
     <color name="skip_button">#78746D</color>
     <color name="dots_current">#65AAEA</color>
     <color name="dots_other">#D5D4D4</color>
+    <color name="textViewBorder">#BEBAB3</color>
 </resources>

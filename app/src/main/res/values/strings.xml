@@ -6,6 +6,9 @@
     <string name="title_intro_two">Find a course for you</string>
     <string name="title_intro_three">Improve your skills</string>
     <string name="description">Quarantine is the perfect time to spend your day learning something new, from anywhere!</string>
+    <string name="Name">Name</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
 
 
 </resources>
