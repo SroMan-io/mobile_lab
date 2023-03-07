@@ -8,37 +8,39 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView"
-        android:layout_width="400dp"
-        android:layout_height="245dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
         android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/textView1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
+        style="@style/SmallTextView"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:fontFamily="@font/rubik"
-        android:text="TextView"
+        android:text="@string/description"
         android:textAlignment="center"
-        android:textSize="14sp"
-        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView1"
+        style="@style/BigTextView"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/rubik_semibold"
-        android:text="TextView"
+
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom|center"
+
+        android:text="@string/Name"
         android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         setupViewPager(binding!!)
+        supportActionBar?.hide()
 
         binding?.buttonSkip?.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)

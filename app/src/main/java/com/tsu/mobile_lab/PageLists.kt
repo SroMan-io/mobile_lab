@@ -6,6 +6,6 @@ object PageLists {
     val introSlides = listOf(
         Intro(R.drawable.intro_one, "Learn anytime\nand anywhere", desc),
         Intro(R.drawable.intro_two, "Find a course\nfor you", desc),
-        Intro(R.drawable.intro_three, "\nImprove your skills", desc)
+        Intro(R.drawable.intro_three, "Improve your skills", desc)
     )
 }
