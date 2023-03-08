@@ -21,7 +21,7 @@ class SignUpActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding.backButton?.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent)
         }
 

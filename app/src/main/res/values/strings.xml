@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mobile_Lab</string>
     <string name="app_name_human">WordsFactory</string>
-    <string name="match_parent">match_parent</string>
+
     <string name="title_intro_one">Learn anytime and anywhere</string>
     <string name="title_intro_two">Find a course for you</string>
     <string name="title_intro_three">Improve your skills</string>
@@ -14,9 +14,13 @@
     <string name="Skip">Skip</string>
     <string name="Create">Create your account</string>
     <string name="title_activity_main_app">MainAppActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="meaning">Meanings:</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="training">Training</string>
+    <string name="video">Video</string>
+    <string name="part_of_speech">Part of speech:</string>
+    <string name="word_explanation">The practice or skill of preparing food by combining, mixing, and heating ingredients.
 
+Example: he developed an interest in cooking. </string>
 
 </resources>

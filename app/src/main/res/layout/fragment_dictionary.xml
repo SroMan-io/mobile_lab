@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dictionary.DictionaryFragment">
+
+
+    <EditText
+        android:id="@+id/wordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
+
+
+        android:background="@drawable/word_description"
+
+        android:fontFamily="@font/rubik"
+        android:hint="Cooking"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textColor="@color/skip_button"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/button"
+        style="@style/RedButton"
+
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="Add to Dictionary"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/search"
+        app:layout_constraintBottom_toBottomOf="@+id/wordEditText"
+        app:layout_constraintEnd_toEndOf="@+id/wordEditText"
+        app:layout_constraintTop_toTopOf="@+id/wordEditText" />
+
+    <TextView
+        android:id="@+id/userWordtextView"
+        style="@style/BigTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cooking"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/userWordFlow"
+        app:layout_constraintStart_toStartOf="@+id/userWordFlow" />
+
+    <TextView
+        android:id="@+id/transcriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="[ˈkʊkɪŋ]"
+        android:textColor="@color/start_gradient"
+        app:layout_constraintBottom_toBottomOf="@+id/userWordtextView"
+        app:layout_constraintStart_toEndOf="@+id/userWordtextView" />
+
+    <ImageButton
+        android:id="@+id/soundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_centerVertical="true"
+
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="-10dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/sound"
+        app:layout_constraintBottom_toBottomOf="@+id/userWordFlow"
+        app:layout_constraintStart_toEndOf="@+id/transcriptionTextView" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/userWordFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        app:constraint_referenced_ids="userWordtextView,transcriptionTextView,soundButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordEditText" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/partSpFlow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        app:constraint_referenced_ids="descPartSpTextView,partSpTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userWordFlow" />
+
+    <TextView
+        android:id="@+id/descPartSpTextView"
+        style="@style/MediumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/part_of_speech"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/partSpFlow"
+        app:layout_constraintStart_toStartOf="@+id/partSpFlow" />
+
+    <TextView
+        android:id="@+id/partSpTextView"
+        style="@style/SmallTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Noun"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/partSpFlow"
+        app:layout_constraintStart_toEndOf="@+id/descPartSpTextView" />
+
+    <TextView
+        android:id="@+id/meaningTextView"
+        style="@style/MediumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/meaning"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/partSpFlow" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/word_description"
+        android:fontFamily="@font/rubik"
+        android:includeFontPadding="false"
+        android:padding="15dp"
+        android:text="@string/word_explanation"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meaningTextView" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/word_description"
+        android:fontFamily="@font/rubik"
+        android:includeFontPadding="false"
+        android:padding="15dp"
+        android:text="@string/word_explanation"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

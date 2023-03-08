@@ -4,11 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
-import com.tsu.mobile_lab.databinding.ActivityMainBinding
+import com.tsu.mobile_lab.databinding.ActivityIntroBinding
 
-class MainActivity : AppCompatActivity() {
+class IntroActivity : AppCompatActivity() {
 
-    private var binding: ActivityMainBinding? = null
+    private var binding: ActivityIntroBinding? = null
 
     private var viewPager2: ViewPager2? = null
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             if(position == amountOfIntroPages - 1){
                 binding?.buttonNavigation?.text = "Let's Start"
                 binding?.buttonNavigation?.setOnClickListener{
-                    val intent = Intent(this@MainActivity, SignUpActivity::class.java)
+                    val intent = Intent(this@IntroActivity, SignUpActivity::class.java)
                     startActivity(intent)
                 }
             }
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         setupViewPager(binding!!)
         supportActionBar?.hide()
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setupViewPager(binding: ActivityMainBinding){
+    private fun setupViewPager(binding: ActivityIntroBinding){
         val adapter = IntroAdapter(PageLists.introSlides)
         viewPager2 = binding.viewPager
         viewPager2?.adapter = adapter
