@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
 
     <item
         android:id="@+id/navigation_dictionary"
         android:icon="@drawable/dictionary"
-        android:title="@string/dictionary" />
+        android:title="@string/dictionary"
+        />
 
     <item
         android:id="@+id/navigation_training"

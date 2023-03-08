@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tsu.mobile_lab.databinding.FragmentVideoBinding
 
+private val url = "https://learnenglish.britishcouncil.org/general-english/video-zone"
 class VideoFragment : Fragment() {
 
     private var _binding: FragmentVideoBinding? = null
@@ -32,6 +36,9 @@ class VideoFragment : Fragment() {
         notificationsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }*/
+
+        binding.webView.webViewClient = MyWebViewClient()
+        binding.webView.loadUrl(url)
         return root
     }
 

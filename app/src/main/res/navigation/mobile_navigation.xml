@@ -9,6 +9,7 @@
         android:id="@+id/navigation_dictionary"
         android:name="com.tsu.mobile_lab.ui.dictionary.DictionaryFragment"
         android:label="@string/dictionary"
+
         tools:layout="@layout/fragment_dictionary" />
 
     <fragment

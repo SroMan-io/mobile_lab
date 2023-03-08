@@ -13,4 +13,5 @@
     <color name="dots_current">#65AAEA</color>
     <color name="dots_other">#D5D4D4</color>
     <color name="textViewBorder">#BEBAB3</color>
+    <color name="splash">#3C3A36</color>
 </resources>
