@@ -1,13 +1,19 @@
 package com.tsu.mobile_lab
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.tsu.mobile_lab.databinding.ActivityMainAppBinding
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class MainAppActivity : AppCompatActivity() {
 
@@ -32,5 +38,24 @@ class MainAppActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        /*val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(DictionaryAPI::class.java)
+
+        lifecycleScope.launch {
+
+            var result = service.getWordInfo("cat")//.toString()
+            var word = result[0]
+            var phon = word.phonetics
+
+            Log.d("Activity",phon.toString())
+        }*/
+
+
     }
 }
