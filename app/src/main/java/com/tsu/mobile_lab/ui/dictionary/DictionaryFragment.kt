@@ -1,6 +1,8 @@
 package com.tsu.mobile_lab.ui.dictionary
 
+import android.content.DialogInterface
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.CalendarContract.Colors
 import android.text.SpannableString
@@ -11,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
@@ -48,6 +51,7 @@ class DictionaryFragment : Fragment() {
         _binding = FragmentDictionaryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        var audio : String = ""
         var list = mutableListOf<SpannableString>()
         val newLine: String = "\n"
         val exampleText: String = "Example: "
@@ -72,44 +76,61 @@ class DictionaryFragment : Fragment() {
         }*/
 
 
+        binding.soundButton.setOnClickListener{
+            val mediaPlayer = MediaPlayer()
 
+            mediaPlayer.setDataSource(audio)
+            mediaPlayer.prepare()
+            mediaPlayer.start()
+
+            //val dialogBuilder = AlertDialog.Builder(this.requireActivity())
+            /*val dialogBuilder = AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+            dialogBuilder.setTitle("Alert")
+            dialogBuilder.setMessage("Field is empty!")
+            dialogBuilder.setNeutralButton("Ok", { dialogInterface: DialogInterface, i: Int ->
+
+            })
+            dialogBuilder.show()*/
+        }
+
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(DictionaryAPI::class.java)
+
+        binding.meanRecyclerView.layoutManager =
+            LinearLayoutManager(this@DictionaryFragment.requireActivity())
+        binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
 
 
         binding.searchButton.setOnClickListener {
+
+
             var userWord = binding.wordEditText.text.toString()
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
 
-            val service = retrofit.create(DictionaryAPI::class.java)
 
             list.clear()
 
             lifecycleScope.launch(Dispatchers.IO) {
-
-                var result = service.getWordInfo(userWord)//.toString()
-                var word = result[0]
-                var phon = word.phonetics
+                try {
+                    var result = service.getWordInfo(userWord)//.toString()
 
 
-                withContext(Dispatchers.Main){
-                    //binding.textView10.text = result[0].meanings[0].definitions[0].definition
-                    //binding.textView11.text = result[0].meanings[0].definitions[1].definition
-                    binding.userWordtextView.text = userWord.replaceFirstChar {
-                        it.uppercase()
-                    }
-                    binding.partSpTextView.text = result[0].meanings[0].partOfSpeech.replaceFirstChar {
-                         it.uppercase()
-                    }
-
+                    var word = result[0]
                     var transcription = result[0].phonetic
                     transcription = transcription.substring(1, transcription.length - 1)
 
-                    binding.transcriptionTextView.text = "[" + transcription + "]"
+                    audio = ""
+                    result[0].phonetics.forEach() {
+                        if (it.audio != "")
+                            audio = it.audio
+                    }
 
-                    result[0].meanings[0].definitions.forEach(){
+                    result[0].meanings[0].definitions.forEach() {
 
                         var example: String = it.example
                         if (example != null) {
@@ -132,18 +153,42 @@ class DictionaryFragment : Fragment() {
                             )
 
                             list.add(coloredExample)
-                        }
-                        else {
+                        } else {
                             val spanDef = SpannableString(it.definition)
                             //binding.textView10.text = it.definition
                             list.add(spanDef)
                         }
                     }
-                    Log.d("Fragment", list[0].toString())
-                    binding.meanRecyclerView.layoutManager = LinearLayoutManager(MainAppActivity())
-                    binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
 
-                   /* var example: String = result[0].meanings[0].definitions[0].example
+
+                    withContext(Dispatchers.Main) {
+                        //binding.textView10.text = result[0].meanings[0].definitions[0].definition
+                        //binding.textView11.text = result[0].meanings[0].definitions[1].definition
+                        binding.userWordtextView.text = userWord.replaceFirstChar {
+                            it.uppercase()
+                        }
+                        binding.partSpTextView.text =
+                            result[0].meanings[0].partOfSpeech.replaceFirstChar {
+                                it.uppercase()
+                            }
+
+
+
+                        binding.transcriptionTextView.text = "[" + transcription + "]"
+
+
+
+                        if (audio == "")
+                            binding.soundButton.visibility = View.INVISIBLE
+                        else binding.soundButton.visibility = View.VISIBLE
+
+
+                        Log.d("Fragment", list[0].toString())
+                        binding.meanRecyclerView.layoutManager =
+                            LinearLayoutManager(this@DictionaryFragment.requireActivity())
+                        binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
+
+                        /* var example: String = result[0].meanings[0].definitions[0].example
                     if (example != null){
                         var wordInfo: String = result[0].meanings[0].definitions[0].definition
                         val lenWordInfo: Int = wordInfo.count() + 2
@@ -161,12 +206,32 @@ class DictionaryFragment : Fragment() {
 
                     else binding.textView10.text = result[0].meanings[0].definitions[0].definition*/
 
+                    }
+
+
+
+                    Log.d("Fragment", result.toString())
+                }
+
+                catch (_ : Throwable){
+                    Log.d("Fragment", "error")
+                     withContext(Dispatchers.Main) {
+                   val dialogBuilder = AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+                    dialogBuilder.setTitle("Alert")
+                    dialogBuilder.setMessage("Field is empty!")
+                    dialogBuilder.setNeutralButton("Ok", { dialogInterface: DialogInterface, i: Int ->
+
+                    })
+                    dialogBuilder.show()
+                    }
                 }
 
 
-
-                Log.d("Fragment", result.toString())
             }
+
+
+
+
         }
 
 

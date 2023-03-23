@@ -23,4 +23,6 @@
 
 Example: he developed an interest in cooking. </string>
 
+    <string name="add_word">Add to Dictionary </string>
+
 </resources>

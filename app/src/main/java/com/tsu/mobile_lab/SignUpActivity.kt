@@ -25,6 +25,11 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.loginButton?.setOnClickListener{
+            val intent = Intent(this, MainAppActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.signUpButton.setOnClickListener {
             if (binding.nameEditText.text.toString().equals("")) {
                 showAlertDialog("Name")
