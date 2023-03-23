@@ -12,19 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
 
 
         android:background="@drawable/word_description"
 
         android:fontFamily="@font/rubik"
-        android:hint="Cooking"
+        android:hint="@string/type_hint"
         android:inputType="text"
-        android:padding="20dp"
+        android:paddingStart="16dp"
+        android:paddingTop="17.5dp"
+        android:paddingBottom="17.5dp"
         android:textColor="@color/skip_button"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,15 +36,15 @@
         android:id="@+id/addButton"
         style="@style/RedButton"
 
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/add_word"
         app:cornerRadius="15dp"
-        app:layout_constraintTop_toBottomOf="@+id/meanRecyclerView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meanRecyclerView" />
 
     <ImageButton
         android:id="@+id/searchButton"
@@ -62,17 +64,18 @@
         style="@style/BigTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cooking"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/first_launch_word"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/userWordFlow"
-        app:layout_constraintStart_toStartOf="@+id/userWordFlow" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordEditText" />
 
     <TextView
         android:id="@+id/transcriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="[ˈkʊkɪŋ]"
+        android:layout_marginStart="16dp"
         android:textColor="@color/start_gradient"
         app:layout_constraintBottom_toBottomOf="@+id/userWordtextView"
         app:layout_constraintStart_toEndOf="@+id/userWordtextView" />
@@ -84,76 +87,54 @@
         android:layout_alignParentRight="false"
         android:layout_centerVertical="true"
 
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="-10dp"
         android:backgroundTint="@color/white"
         android:src="@drawable/sound"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/userWordFlow"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/userWordtextView"
         app:layout_constraintStart_toEndOf="@+id/transcriptionTextView" />
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/userWordFlow"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        app:constraint_referenced_ids="userWordtextView,transcriptionTextView,soundButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wordEditText" />
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/partSpFlow"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:constraint_referenced_ids="descPartSpTextView,partSpTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userWordFlow" />
 
     <TextView
         android:id="@+id/descPartSpTextView"
         style="@style/MediumTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/part_of_speech"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/partSpFlow"
-        app:layout_constraintStart_toStartOf="@+id/partSpFlow" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userWordtextView" />
 
     <TextView
         android:id="@+id/partSpTextView"
         style="@style/SmallTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="Noun"
+        android:layout_marginStart="16dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/partSpFlow"
+        app:layout_constraintBottom_toBottomOf="@+id/descPartSpTextView"
         app:layout_constraintStart_toEndOf="@+id/descPartSpTextView" />
 
     <TextView
         android:id="@+id/meaningTextView"
         style="@style/MediumTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/meaning"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partSpFlow" />
+        app:layout_constraintTop_toBottomOf="@+id/descPartSpTextView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/meanRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/addButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

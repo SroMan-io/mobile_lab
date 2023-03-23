@@ -218,7 +218,9 @@ class DictionaryFragment : Fragment() {
                      withContext(Dispatchers.Main) {
                    val dialogBuilder = AlertDialog.Builder(this@DictionaryFragment.requireActivity())
                     dialogBuilder.setTitle("Alert")
-                    dialogBuilder.setMessage("Field is empty!")
+                    dialogBuilder.setMessage("Error during getting data from a server was occurred! " + newLine + newLine +
+                            "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
+                            "If you are sure it's not your fault, then, please, try input your request a bit later.")
                     dialogBuilder.setNeutralButton("Ok", { dialogInterface: DialogInterface, i: Int ->
 
                     })
