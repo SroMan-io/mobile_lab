@@ -21,9 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.savedstate.R
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tsu.mobile_lab.DictionaryAPI
-import com.tsu.mobile_lab.MainAppActivity
-import com.tsu.mobile_lab.MeaningsListAdapter
+import androidx.room.Room
+import com.tsu.mobile_lab.*
 import com.tsu.mobile_lab.databinding.FragmentDictionaryBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +50,10 @@ class DictionaryFragment : Fragment() {
         _binding = FragmentDictionaryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        var userWord = ""
+        var transcription = ""
         var audio : String = ""
+        var partOfSpeech = ""
         var list = mutableListOf<SpannableString>()
         val newLine: String = "\n"
         val exampleText: String = "Example: "
@@ -93,6 +95,70 @@ class DictionaryFragment : Fragment() {
             dialogBuilder.show()*/
         }
 
+        val database = Room.databaseBuilder(activity!!.applicationContext, WordDB::class.java, "words_db").build()
+
+        binding.addButton.setOnClickListener{
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                //val wordInfo = WordEntityDB()
+                //database.wordDao()
+                   // .delete(WordEntityDB("","","","bad"))
+                var w: WordEntityDB? = database.wordDao()
+                    .findWord(userWord)
+                if (w!=null){
+                    /*database.wordDao()
+                        .insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))*/
+
+                withContext(Dispatchers.Main) {
+                    val dialogBuilder =
+                        AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+                    dialogBuilder.setTitle("Alert")
+                    dialogBuilder.setMessage(
+                        "Word exists in your dictionary already!"
+                    )
+                    dialogBuilder.setNeutralButton(
+                        "Ok",
+                        { dialogInterface: DialogInterface, i: Int ->
+
+                        })
+                    dialogBuilder.show()
+                    }
+                }
+                //Log.d("Fragment", w.toString())
+
+                else if (transcription == "" && partOfSpeech == ""){
+
+                    withContext(Dispatchers.Main) {
+                        val dialogBuilder =
+                            AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+                        dialogBuilder.setTitle("Alert")
+                        dialogBuilder.setMessage(
+                            "Can't add new word cause of absence of internet connection!"
+                        )
+                        dialogBuilder.setNeutralButton(
+                            "Ok",
+                            { dialogInterface: DialogInterface, i: Int ->
+
+                            })
+                        dialogBuilder.show()
+                    }
+
+            }
+                else {
+                    //Log.d("Fragment", "null")
+
+
+                        database.wordDao()
+                            .insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
+                    }
+
+
+               /* database.wordDao()
+                    //.insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
+                    .getAllMeanings()*/
+            }
+        }
+
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
@@ -109,7 +175,7 @@ class DictionaryFragment : Fragment() {
         binding.searchButton.setOnClickListener {
 
 
-            var userWord = binding.wordEditText.text.toString()
+            userWord = binding.wordEditText.text.toString()
 
 
 
@@ -120,8 +186,8 @@ class DictionaryFragment : Fragment() {
                     var result = service.getWordInfo(userWord)//.toString()
 
 
-                    var word = result[0]
-                    var transcription = result[0].phonetic
+                    //var word = result[0]
+                    transcription = result[0].phonetic
                     transcription = transcription.substring(1, transcription.length - 1)
 
                     audio = ""
@@ -167,10 +233,12 @@ class DictionaryFragment : Fragment() {
                         binding.userWordtextView.text = userWord.replaceFirstChar {
                             it.uppercase()
                         }
-                        binding.partSpTextView.text =
-                            result[0].meanings[0].partOfSpeech.replaceFirstChar {
-                                it.uppercase()
-                            }
+
+                        partOfSpeech = result[0].meanings[0].partOfSpeech.replaceFirstChar {
+                            it.uppercase()
+                        }
+                        binding.partSpTextView.text = partOfSpeech
+
 
 
 
@@ -213,33 +281,99 @@ class DictionaryFragment : Fragment() {
                     Log.d("Fragment", result.toString())
                 }
 
-                catch (_ : Throwable){
-                    Log.d("Fragment", "error")
-                     withContext(Dispatchers.Main) {
-                   val dialogBuilder = AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-                    dialogBuilder.setTitle("Alert")
-                    dialogBuilder.setMessage("Error during getting data from a server was occurred! " + newLine + newLine +
-                            "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
-                            "If you are sure it's not your fault, then, please, try input your request a bit later.")
-                    dialogBuilder.setNeutralButton("Ok", { dialogInterface: DialogInterface, i: Int ->
 
-                    })
-                    dialogBuilder.show()
-                    }
+                catch (_ : Throwable) {
+                   // try {
+                        var w: WordEntityDB? = database.wordDao()
+                            //.insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
+                            .findWord(userWord)
+                        if (w!=null){
+                            Log.d("Fragment", w.toString())
+
+                            withContext(Dispatchers.Main) {
+                                binding.userWordtextView.text = w.Word.replaceFirstChar {
+                                    it.uppercase()
+                                }
+
+                                binding.partSpTextView.text = w.PartOfSpeech.replaceFirstChar {
+                                    it.uppercase()
+                                }
+                                //binding.partSpTextView.text = partOfSpeech
+
+
+
+
+                                binding.transcriptionTextView.text = "[" + w.Transcription + "]"
+                                binding.soundButton.visibility = View.INVISIBLE
+
+                                /*binding.meanRecyclerView.layoutManager =
+                                    LinearLayoutManager(this@DictionaryFragment.requireActivity())
+                                binding.meanRecyclerView.adapter = MeaningsListAdapter(list)*/
+
+
+                                /*audio = w.Audio
+
+                                if (audio == "")
+                                    binding.soundButton.visibility = View.INVISIBLE
+                                else binding.soundButton.visibility = View.VISIBLE*/
+
+                            }
+
+                        }
+                        else {
+                            Log.d("Fragment", "error")
+                            withContext(Dispatchers.Main) {
+                                val dialogBuilder =
+                                    AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+                                dialogBuilder.setTitle("Alert")
+                                dialogBuilder.setMessage(
+                                    "Error during getting data from a server was occurred! " + newLine + newLine +
+                                            "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
+                                            "If you are sure it's not your fault, then, please, try input your request a bit later."
+                                )
+                                dialogBuilder.setNeutralButton(
+                                    "Ok",
+                                    { dialogInterface: DialogInterface, i: Int ->
+
+                                    })
+                                dialogBuilder.show()
+                                // }
+                            }
+
+
+                            }
+                            //Log.d("Fragment", "null")
+
+
+
+                   // }
+                       /* {
+                    catch(_ : Throwable) {
+                        Log.d("Fragment", "error")
+                        withContext(Dispatchers.Main) {
+                            val dialogBuilder =
+                                AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+                            dialogBuilder.setTitle("Alert")
+                            dialogBuilder.setMessage(
+                                "Error during getting data from a server was occurred! " + newLine + newLine +
+                                        "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
+                                        "If you are sure it's not your fault, then, please, try input your request a bit later."
+                            )
+                            dialogBuilder.setNeutralButton(
+                                "Ok",
+                                { dialogInterface: DialogInterface, i: Int ->
+
+                                })
+                            dialogBuilder.show()
+                       // }*/
+
+
                 }
-
 
             }
 
 
-
-
         }
-
-
-
-
-
 
 
         return root

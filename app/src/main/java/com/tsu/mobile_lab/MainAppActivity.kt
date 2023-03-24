@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
 import com.tsu.mobile_lab.databinding.ActivityMainAppBinding
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -38,7 +39,7 @@ class MainAppActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
+        val database = Room.databaseBuilder(applicationContext, WordDB::class.java, "words_db").build()
 
         /*val retrofit = Retrofit.Builder()
             .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
