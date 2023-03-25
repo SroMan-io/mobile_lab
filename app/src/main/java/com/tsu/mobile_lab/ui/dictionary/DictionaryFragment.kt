@@ -4,7 +4,6 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.provider.CalendarContract.Colors
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -12,14 +11,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.toSpannable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.savedstate.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.tsu.mobile_lab.*
@@ -29,7 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class DictionaryFragment : Fragment() {
 
@@ -39,126 +32,58 @@ class DictionaryFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private fun makeDialog(message: String) {
+        val dialogBuilder =
+            AlertDialog.Builder(this@DictionaryFragment.requireActivity())
+        dialogBuilder.setTitle("Alert")
+        dialogBuilder.setMessage(message)
+        dialogBuilder.setNeutralButton("Ok")
+        { _: DialogInterface, _: Int -> }
+        dialogBuilder.show()
+    }
+
+    private fun makeRecyclerViewElement(meaning: String, example: String) : SpannableString {
+        val exampleText = "Example: "
+
+        if (example != "") {
+            val lenWordInfo: Int = meaning.count() + 2
+            val totalWordInfo = meaning + newLine + newLine + exampleText + example
+            val coloredExample = SpannableString(totalWordInfo)
+            val fcsBlue = ForegroundColorSpan(Color.parseColor("#65AAEA"))
+
+            coloredExample.setSpan(
+                fcsBlue,
+                lenWordInfo,
+                lenWordInfo + 9,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            return coloredExample
+        }
+
+        else return SpannableString(meaning)
+    }
+
+    private val newLine: String = "\n"
+    private val errorMessage = "Error during getting data from a server was occurred! " + newLine + newLine +
+            "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
+            "If you are sure it's not your fault, then, please, try input your request a bit later."
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(DictionaryViewModel::class.java)
-
         _binding = FragmentDictionaryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         var userWord = ""
         var transcription = ""
-        var audio : String = ""
+        var audio = ""
         var partOfSpeech = ""
-        var list = mutableListOf<SpannableString>()
-        val newLine: String = "\n"
-        val exampleText: String = "Example: "
-        var wordInfo: String = "The practice or skill of preparing food by combining, mixing, and heating ingredients."
-        val lenWordInfo: Int = wordInfo.count() + 2
-        //val info = wordInfo.substring("skill")
-        var exampleInfo: String = "Example: he developed an interest in cooking."
-        val totalWordInfo = wordInfo + newLine + newLine + exampleInfo
-        var coloredExample = SpannableString(totalWordInfo)
-        var fcsBlue = ForegroundColorSpan(
-            Color.parseColor("#65AAEA")
-        )
-
-        coloredExample.setSpan(fcsBlue, lenWordInfo, lenWordInfo + 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-
-        //binding.textView10.text = coloredExample
-        //binding.textView11.text = coloredExample
-        /*val textView: TextView = binding.textView10
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
-
-
-        binding.soundButton.setOnClickListener{
-            val mediaPlayer = MediaPlayer()
-
-            mediaPlayer.setDataSource(audio)
-            mediaPlayer.prepare()
-            mediaPlayer.start()
-
-            //val dialogBuilder = AlertDialog.Builder(this.requireActivity())
-            /*val dialogBuilder = AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-            dialogBuilder.setTitle("Alert")
-            dialogBuilder.setMessage("Field is empty!")
-            dialogBuilder.setNeutralButton("Ok", { dialogInterface: DialogInterface, i: Int ->
-
-            })
-            dialogBuilder.show()*/
-        }
-
-        val database = Room.databaseBuilder(activity!!.applicationContext, WordDB::class.java, "words_db").build()
-
-        binding.addButton.setOnClickListener{
-
-            lifecycleScope.launch(Dispatchers.IO) {
-                //val wordInfo = WordEntityDB()
-                //database.wordDao()
-                   // .delete(WordEntityDB("","","","bad"))
-                var w: WordEntityDB? = database.wordDao()
-                    .findWord(userWord)
-                if (w!=null){
-                    /*database.wordDao()
-                        .insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))*/
-
-                withContext(Dispatchers.Main) {
-                    val dialogBuilder =
-                        AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-                    dialogBuilder.setTitle("Alert")
-                    dialogBuilder.setMessage(
-                        "Word exists in your dictionary already!"
-                    )
-                    dialogBuilder.setNeutralButton(
-                        "Ok",
-                        { dialogInterface: DialogInterface, i: Int ->
-
-                        })
-                    dialogBuilder.show()
-                    }
-                }
-                //Log.d("Fragment", w.toString())
-
-                else if (transcription == "" && partOfSpeech == ""){
-
-                    withContext(Dispatchers.Main) {
-                        val dialogBuilder =
-                            AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-                        dialogBuilder.setTitle("Alert")
-                        dialogBuilder.setMessage(
-                            "Can't add new word cause of absence of internet connection!"
-                        )
-                        dialogBuilder.setNeutralButton(
-                            "Ok",
-                            { dialogInterface: DialogInterface, i: Int ->
-
-                            })
-                        dialogBuilder.show()
-                    }
-
-            }
-                else {
-                    //Log.d("Fragment", "null")
-
-
-                        database.wordDao()
-                            .insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
-                    }
-
-
-               /* database.wordDao()
-                    //.insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
-                    .getAllMeanings()*/
-            }
-        }
-
+        val list = mutableListOf<SpannableString>()
+        val listOfMeanings = mutableListOf<String>()
+        val listOfExamples = mutableListOf<String>()
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.dictionaryapi.dev/api/v2/entries/en/")
@@ -167,214 +92,138 @@ class DictionaryFragment : Fragment() {
 
         val service = retrofit.create(DictionaryAPI::class.java)
 
+        val database = Room.databaseBuilder(activity!!.applicationContext, WordDB::class.java, "words_db")
+            .fallbackToDestructiveMigration().build()
+
         binding.meanRecyclerView.layoutManager =
             LinearLayoutManager(this@DictionaryFragment.requireActivity())
         binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
 
-
-        binding.searchButton.setOnClickListener {
-
-
-            userWord = binding.wordEditText.text.toString()
-
-
-
-            list.clear()
+        binding.soundButton.setOnClickListener {
+            val mediaPlayer = MediaPlayer()
+            mediaPlayer.setDataSource(audio)
 
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    var result = service.getWordInfo(userWord)//.toString()
+                    service.getWordInfo(userWord)
+                    mediaPlayer.prepare()
+                    mediaPlayer.start()
+                }
+                catch (_: Throwable) {
+                    withContext(Dispatchers.Main) {
+                        binding.soundButton.visibility = View.INVISIBLE
+                        makeDialog(errorMessage)
+                    }
+                }
+            }
+        }
 
+        binding.addButton.setOnClickListener{
 
-                    //var word = result[0]
+            lifecycleScope.launch(Dispatchers.IO) {
+                //database.wordDao().delete(WordEntityDB("","","","bad"))
+                val w: WordEntityDB? = database.wordDao().findWord(userWord)
+
+                if (w!=null) {
+                    withContext(Dispatchers.Main) {
+                        makeDialog("Word exists in your dictionary already!")
+                    }
+                }
+
+                else if (transcription == "" && partOfSpeech == "") {
+                    withContext(Dispatchers.Main) {
+                        makeDialog("Can't add new word cause of absence of internet connection!")
+                    }
+                }
+                else {
+                    database.wordDao()
+                        .insert(WordEntityDB(transcription, partOfSpeech, userWord))
+
+                    var i = 0
+                    listOfMeanings.forEach{
+                        database.meaningDao().insert(MeaningEntityDB(userWord, it, listOfExamples[i]))
+                        i++
+                    }
+                }
+            }
+        }
+
+        binding.searchButton.setOnClickListener {
+            userWord = binding.wordEditText.text.toString()
+            transcription = ""
+            audio = ""
+            partOfSpeech = ""
+            listOfExamples.clear()
+            listOfMeanings.clear()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val result = service.getWordInfo(userWord)
+                    list.clear()
+
                     transcription = result[0].phonetic
                     transcription = transcription.substring(1, transcription.length - 1)
 
-                    audio = ""
-                    result[0].phonetics.forEach() {
+                    result[0].phonetics.forEach {
                         if (it.audio != "")
                             audio = it.audio
                     }
 
-                    result[0].meanings[0].definitions.forEach() {
+                    result[0].meanings[0].definitions.forEach {
+                        val meaning = it.definition
+                        listOfMeanings.add(meaning)
 
-                        var example: String = it.example
-                        if (example != null) {
-                            var wordInfo: String = it.definition
-                            val lenWordInfo: Int = wordInfo.count() + 2
-                            //val info = wordInfo.substring("skill")
-                            //var exampleInfo: String = result[0].meanings[0].definitions[0].example
-                            val totalWordInfo =
-                                wordInfo + newLine + newLine + exampleText + example
-                            var coloredExample = SpannableString(totalWordInfo)
-                            var fcsBlue = ForegroundColorSpan(
-                                Color.parseColor("#65AAEA")
-                            )
+                        val example = it.example ?: ""
+                        listOfExamples.add(example)
 
-                            coloredExample.setSpan(
-                                fcsBlue,
-                                lenWordInfo,
-                                lenWordInfo + 9,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-
-                            list.add(coloredExample)
-                        } else {
-                            val spanDef = SpannableString(it.definition)
-                            //binding.textView10.text = it.definition
-                            list.add(spanDef)
-                        }
+                        list.add(makeRecyclerViewElement(meaning, example))
                     }
 
+                    userWord = userWord.replaceFirstChar {
+                        it.uppercase()
+                    }
+
+                    partOfSpeech = result[0].meanings[0].partOfSpeech.replaceFirstChar {
+                        it.uppercase()
+                    }
 
                     withContext(Dispatchers.Main) {
-                        //binding.textView10.text = result[0].meanings[0].definitions[0].definition
-                        //binding.textView11.text = result[0].meanings[0].definitions[1].definition
-                        binding.userWordtextView.text = userWord.replaceFirstChar {
-                            it.uppercase()
-                        }
-
-                        partOfSpeech = result[0].meanings[0].partOfSpeech.replaceFirstChar {
-                            it.uppercase()
-                        }
+                        binding.userWordtextView.text = userWord
                         binding.partSpTextView.text = partOfSpeech
-
-
-
-
                         binding.transcriptionTextView.text = "[" + transcription + "]"
 
-
-
-                        if (audio == "")
-                            binding.soundButton.visibility = View.INVISIBLE
+                        if (audio == "") binding.soundButton.visibility = View.INVISIBLE
                         else binding.soundButton.visibility = View.VISIBLE
-
-
-                        Log.d("Fragment", list[0].toString())
-                        binding.meanRecyclerView.layoutManager =
-                            LinearLayoutManager(this@DictionaryFragment.requireActivity())
-                        binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
-
-                        /* var example: String = result[0].meanings[0].definitions[0].example
-                    if (example != null){
-                        var wordInfo: String = result[0].meanings[0].definitions[0].definition
-                        val lenWordInfo: Int = wordInfo.count() + 2
-                        //val info = wordInfo.substring("skill")
-                        var exampleInfo: String = result[0].meanings[0].definitions[0].example
-                        val totalWordInfo = wordInfo + newLine + newLine + exampleText + exampleInfo
-                        var coloredExample = SpannableString(totalWordInfo)
-                        var fcsBlue = ForegroundColorSpan(
-                            Color.parseColor("#65AAEA")
-                        )
-
-                        coloredExample.setSpan(fcsBlue, lenWordInfo, lenWordInfo + 9, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        binding.textView10.text = coloredExample
                     }
-
-                    else binding.textView10.text = result[0].meanings[0].definitions[0].definition*/
-
-                    }
-
-
-
-                    Log.d("Fragment", result.toString())
+                    //Log.d("Fragment", result.toString())
                 }
-
 
                 catch (_ : Throwable) {
-                   // try {
-                        var w: WordEntityDB? = database.wordDao()
-                            //.insert(WordEntityDB(transcription, audio, partOfSpeech, userWord))
-                            .findWord(userWord)
-                        if (w!=null){
-                            Log.d("Fragment", w.toString())
 
-                            withContext(Dispatchers.Main) {
-                                binding.userWordtextView.text = w.Word.replaceFirstChar {
-                                    it.uppercase()
-                                }
+                    val w: WordEntityDB? = database.wordDao().findWord(userWord)
+                    if (w != null) {
 
-                                binding.partSpTextView.text = w.PartOfSpeech.replaceFirstChar {
-                                    it.uppercase()
-                                }
-                                //binding.partSpTextView.text = partOfSpeech
-
-
-
-
-                                binding.transcriptionTextView.text = "[" + w.Transcription + "]"
-                                binding.soundButton.visibility = View.INVISIBLE
-
-                                /*binding.meanRecyclerView.layoutManager =
-                                    LinearLayoutManager(this@DictionaryFragment.requireActivity())
-                                binding.meanRecyclerView.adapter = MeaningsListAdapter(list)*/
-
-
-                                /*audio = w.Audio
-
-                                if (audio == "")
-                                    binding.soundButton.visibility = View.INVISIBLE
-                                else binding.soundButton.visibility = View.VISIBLE*/
-
-                            }
-
+                        val m = database.meaningDao().getWordInfo(userWord)
+                        m.forEach {
+                            list.add(makeRecyclerViewElement(it.Meaning, it.Example))
                         }
-                        else {
-                            Log.d("Fragment", "error")
-                            withContext(Dispatchers.Main) {
-                                val dialogBuilder =
-                                    AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-                                dialogBuilder.setTitle("Alert")
-                                dialogBuilder.setMessage(
-                                    "Error during getting data from a server was occurred! " + newLine + newLine +
-                                            "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
-                                            "If you are sure it's not your fault, then, please, try input your request a bit later."
-                                )
-                                dialogBuilder.setNeutralButton(
-                                    "Ok",
-                                    { dialogInterface: DialogInterface, i: Int ->
 
-                                    })
-                                dialogBuilder.show()
-                                // }
-                            }
-
-
-                            }
-                            //Log.d("Fragment", "null")
-
-
-
-                   // }
-                       /* {
-                    catch(_ : Throwable) {
-                        Log.d("Fragment", "error")
                         withContext(Dispatchers.Main) {
-                            val dialogBuilder =
-                                AlertDialog.Builder(this@DictionaryFragment.requireActivity())
-                            dialogBuilder.setTitle("Alert")
-                            dialogBuilder.setMessage(
-                                "Error during getting data from a server was occurred! " + newLine + newLine +
-                                        "Please, check your word is correct or your internet connection is able. " + newLine + newLine +
-                                        "If you are sure it's not your fault, then, please, try input your request a bit later."
-                            )
-                            dialogBuilder.setNeutralButton(
-                                "Ok",
-                                { dialogInterface: DialogInterface, i: Int ->
+                            binding.userWordtextView.text = w.Word
+                            binding.partSpTextView.text = w.PartOfSpeech
+                            binding.transcriptionTextView.text = "[" + w.Transcription + "]"
+                            binding.soundButton.visibility = View.INVISIBLE
+                        }
+                    }
 
-                                })
-                            dialogBuilder.show()
-                       // }*/
-
-
+                    else {
+                        withContext(Dispatchers.Main) {
+                            makeDialog(errorMessage)
+                        }
+                    }
                 }
-
             }
-
-
         }
-
 
         return root
     }

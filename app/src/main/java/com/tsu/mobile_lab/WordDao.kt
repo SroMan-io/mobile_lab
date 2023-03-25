@@ -13,10 +13,9 @@ interface WordDao {
     @Query("SELECT * FROM wordentitydb")
     fun getAllMeanings(): List<WordEntityDB>
 
-    @Query("SELECT * FROM wordentitydb WHERE word LIKE :userword") // SELECT * FROM wordentitydb WHERE word = userword
+    @Query("SELECT * FROM wordentitydb WHERE word LIKE :userword")
     fun findWord(userword: String): WordEntityDB
 
     @Delete
     fun delete(word: WordEntityDB)
-   // SELECT * FROM `USERS` WHERE `ID` = 2;
 }
