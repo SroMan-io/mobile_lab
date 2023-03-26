@@ -105,7 +105,6 @@ class DictionaryFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    service.getWordInfo(userWord)
                     mediaPlayer.prepare()
                     mediaPlayer.start()
                 }
@@ -121,8 +120,9 @@ class DictionaryFragment : Fragment() {
         binding.addButton.setOnClickListener{
 
             lifecycleScope.launch(Dispatchers.IO) {
-                //database.wordDao().delete(WordEntityDB("","","","bad"))
+                //database.wordDao().delete(WordEntityDB("","","cro"))
                 val w: WordEntityDB? = database.wordDao().findWord(userWord)
+                //Log.d("Fragment", w.toString())
 
                 if (w!=null) {
                     withContext(Dispatchers.Main) {
@@ -132,7 +132,9 @@ class DictionaryFragment : Fragment() {
 
                 else if (transcription == "" && partOfSpeech == "") {
                     withContext(Dispatchers.Main) {
-                        makeDialog("Can't add new word cause of absence of internet connection!")
+                        makeDialog("Can't add new word to your dictionary!" + newLine + newLine +
+                                "Please, check your typed word is correct or " +
+                                "your internet connection is able")
                     }
                 }
                 else {
@@ -149,9 +151,9 @@ class DictionaryFragment : Fragment() {
         }
 
         binding.searchButton.setOnClickListener {
+
             userWord = binding.wordEditText.text.toString()
             transcription = ""
-            audio = ""
             partOfSpeech = ""
             listOfExamples.clear()
             listOfMeanings.clear()
@@ -159,14 +161,22 @@ class DictionaryFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val result = service.getWordInfo(userWord)
-                    list.clear()
 
-                    transcription = result[0].phonetic
-                    transcription = transcription.substring(1, transcription.length - 1)
+                    list.clear()
+                    audio = ""
+
+                    //transcription = result[0].phonetic ?: ""
 
                     result[0].phonetics.forEach {
-                        if (it.audio != "")
-                            audio = it.audio
+                        if (audio != "" && transcription != "") return@forEach
+                        if (it.audio != "") audio = it.audio
+
+                        if (it.text != "") {
+                            transcription = it.text ?: transcription
+
+                            if (transcription != "")
+                                transcription = transcription.substring(1, transcription.length - 1)
+                        }
                     }
 
                     result[0].meanings[0].definitions.forEach {
@@ -190,19 +200,21 @@ class DictionaryFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         binding.userWordtextView.text = userWord
                         binding.partSpTextView.text = partOfSpeech
-                        binding.transcriptionTextView.text = "[" + transcription + "]"
+                        if (transcription != "")
+                            binding.transcriptionTextView.text = "[" + transcription + "]"
+                        else binding.transcriptionTextView.text =  transcription
+                        binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
 
                         if (audio == "") binding.soundButton.visibility = View.INVISIBLE
                         else binding.soundButton.visibility = View.VISIBLE
                     }
-                    //Log.d("Fragment", result.toString())
                 }
 
                 catch (_ : Throwable) {
 
                     val w: WordEntityDB? = database.wordDao().findWord(userWord)
                     if (w != null) {
-
+                        list.clear()
                         val m = database.meaningDao().getWordInfo(userWord)
                         m.forEach {
                             list.add(makeRecyclerViewElement(it.Meaning, it.Example))
@@ -211,8 +223,11 @@ class DictionaryFragment : Fragment() {
                         withContext(Dispatchers.Main) {
                             binding.userWordtextView.text = w.Word
                             binding.partSpTextView.text = w.PartOfSpeech
-                            binding.transcriptionTextView.text = "[" + w.Transcription + "]"
+                            if (w.Transcription != "")
+                                binding.transcriptionTextView.text = "[" + w.Transcription + "]"
+                            else binding.transcriptionTextView.text =  w.Transcription
                             binding.soundButton.visibility = View.INVISIBLE
+                            binding.meanRecyclerView.adapter = MeaningsListAdapter(list)
                         }
                     }
 
